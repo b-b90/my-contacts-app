@@ -1,8 +1,8 @@
 package main;
 
-import view.ComandForm;
+import view.CommandForm;
 
-public class Comand {
+public class Command {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -13,7 +13,7 @@ public class Comand {
 	
 	public static void gui() {
 		
-		ComandForm form = new ComandForm();
+		CommandForm form = new CommandForm();
 		
 		form.go();
 	}
