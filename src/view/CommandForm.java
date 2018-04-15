@@ -15,12 +15,14 @@ public class CommandForm {
 	JRadioButton partRadio = new JRadioButton("Part of data");
 	ButtonGroup radioGroup = new ButtonGroup();
 	JButton searchButton = new JButton("Search");
-	JTable table = new JTable();
+	String column[] = {"NAME", "SURNAME", "NUMBER"};
+	String data[][] = {};
+	JTable table = new JTable(data, column);
 	JScrollPane scroll = new JScrollPane(table);
 	JButton showButton = new JButton("Show contact");
 	JButton addButton = new JButton("Add contact");
-	ViewForm view = new ViewForm();
-	AddingForm add = new AddingForm();
+	ViewForm viewForm = new ViewForm();
+	AddingForm addForm = new AddingForm();
 	
 	public void go() {
 		
@@ -54,7 +56,7 @@ public class CommandForm {
 		
 		frame.add(panel);
 		frame.setSize(500, 550);
-		frame.setLocation(400, 150);
+		frame.setLocation(400, 120);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -66,7 +68,7 @@ public class CommandForm {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
-			view.view();
+			viewForm.view();
 			
 		}		
 	}
@@ -77,7 +79,7 @@ public class CommandForm {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
-			add.add();
+			addForm.add();
 			
 		}		
 	}

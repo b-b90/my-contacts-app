@@ -38,6 +38,8 @@ public class Model {
 				
 				Contact contact = new Contact(name, surname, number);
 				contacts.add(contact);
+				
+				System.out.println(contact);
 			}
 			
 			readContacts.close();
@@ -47,5 +49,4 @@ public class Model {
 		}
 		
 	}
-
 }

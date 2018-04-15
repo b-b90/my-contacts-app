@@ -2,7 +2,7 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.*;
 import javax.swing.*;
 
 public class AddingForm {
@@ -62,7 +62,26 @@ public class AddingForm {
 				JOptionPane.showMessageDialog(frame, "You must enter a number", "Enter number", JOptionPane.WARNING_MESSAGE);
 			} else {
 				
-				JOptionPane.showMessageDialog(frame, "Contact is saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+				try {
+					
+					PrintWriter newContact = new PrintWriter(new FileWriter(new File("contacts.txt"), true));
+					
+					newContact.println(nameText.getText() + ";" + surnameText.getText() + ";" + numberText.getText());
+					
+					JOptionPane.showMessageDialog(frame, "Contact is saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+					
+					nameText.setText("");
+					surnameText.setText("");
+					numberText.setText("");
+					
+					newContact.close();
+					
+				} catch (IOException ev) {
+					
+					ev.printStackTrace();
+					
+					JOptionPane.showMessageDialog(frame, "Contact is not saved", "Failed", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 			
 		}
