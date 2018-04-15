@@ -43,7 +43,6 @@ public class ViewForm implements ActionListener {
 		frame.add(panel);
 		frame.setSize(350, 300);
 		frame.setLocation(500, 200);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	
@@ -51,13 +50,6 @@ public class ViewForm implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		System.exit(0);		
+		frame.setVisible(false);
 	}
-
-	public static void main(String[] args) {
-		
-		ViewForm form = new ViewForm();
-		form.view();
-	}
-
 }

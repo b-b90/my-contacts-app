@@ -1,8 +1,10 @@
 package model;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
+
 import domen.Contact;
 
 public class Model {
@@ -20,6 +22,30 @@ public class Model {
 		return instance;
 	}
 	
-	private void readTheFile() {}
+	private void readTheFile() {
+		
+		try {
+			
+			BufferedReader readContacts = new BufferedReader(new FileReader(new File(fileName)));
+			String contactRow = "";
+			
+			while ((contactRow = readContacts.readLine()) != null) {
+				
+				StringTokenizer token = new StringTokenizer(contactRow, ";");
+				String name = token.nextToken();
+				String surname = token.nextToken();
+				String number = token.nextToken();
+				
+				Contact contact = new Contact(name, surname, number);
+				contacts.add(contact);
+			}
+			
+			readContacts.close();
+		} catch(IOException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
 
 }

@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class AddingForm {
@@ -25,6 +28,7 @@ public class AddingForm {
 		numberText.setBounds(145, 120, 120, 25);
 		
 		saveButton.setBounds(70, 170, 150, 30);
+		saveButton.addActionListener(new SaveListener());
 		
 		panel.add(nameLabel);
 		panel.add(nameText);
@@ -38,8 +42,31 @@ public class AddingForm {
 		frame.add(panel);
 		frame.setSize(300, 300);
 		frame.setLocation(500, 200);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
+	
+	class SaveListener implements ActionListener {
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+			if (nameText.getText().isEmpty()) {
+				
+				JOptionPane.showMessageDialog(frame, "You must enter a name", "Enter name", JOptionPane.WARNING_MESSAGE);
+			} else if (surnameText.getText().isEmpty()) {
+				
+				JOptionPane.showMessageDialog(frame, "You must enter a surname", "Enter surname", JOptionPane.WARNING_MESSAGE);
+			} else if (numberText.getText().isEmpty()) {
+				
+				JOptionPane.showMessageDialog(frame, "You must enter a number", "Enter number", JOptionPane.WARNING_MESSAGE);
+			} else {
+				
+				JOptionPane.showMessageDialog(frame, "Contact is saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+		}
+		
+		
+	}
 }
