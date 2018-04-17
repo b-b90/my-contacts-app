@@ -27,7 +27,7 @@ public class AddingForm {
 		surnameText.setBounds(145, 80, 120, 25);
 		numberText.setBounds(145, 120, 120, 25);
 		
-		saveButton.setBounds(70, 170, 150, 30);
+		saveButton.setBounds(70, 190, 150, 30);
 		saveButton.addActionListener(new SaveListener());
 		
 		panel.add(nameLabel);

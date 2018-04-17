@@ -27,7 +27,7 @@ public class ViewForm implements ActionListener {
 		surnameLabel2.setBounds(145, 60, 120, 25);
 		numberLabel2.setBounds(145, 100, 120, 25);
 		
-		closeButton.setBounds(90, 180, 150, 30);
+		closeButton.setBounds(60, 180, 150, 30);
 		closeButton.addActionListener(this);
 		
 		panel.setLayout(null);
@@ -41,7 +41,7 @@ public class ViewForm implements ActionListener {
 		panel.add(closeButton);
 		
 		frame.add(panel);
-		frame.setSize(350, 300);
+		frame.setSize(290, 300);
 		frame.setLocation(500, 200);
 		frame.setVisible(true);
 	}
