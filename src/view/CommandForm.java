@@ -2,6 +2,13 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import model.Model;
@@ -14,15 +21,18 @@ public class CommandForm {
 	JTextField topTextbox;
 	JRadioButton fullRadio;
 	JRadioButton partRadio;
+	JRadioButton allRadio;
 	ButtonGroup radioGroup;
 	JButton searchButton;
 	JTable table;
 	JScrollPane scroll;
 	JButton showButton;
 	JButton addButton;
+	JButton deleteButton;
 	ViewForm viewForm;
 	AddingForm addForm;
 	DefaultTableModel model;
+	Model m;
 	String [] columns = {"Name", "Surname", "Number"};
 	
 	public void go() {
@@ -34,21 +44,27 @@ public class CommandForm {
 		
 		fullRadio = new JRadioButton("Full data");
 		partRadio = new JRadioButton("Part of data");
+		allRadio = new JRadioButton("View all");
 		radioGroup = new ButtonGroup();
 		radioGroup.add(fullRadio);
 		radioGroup.add(partRadio);
-		fullRadio.setBounds(155, 70, 100, 25);
-		partRadio.setBounds(255, 70, 100, 25);
+		radioGroup.add(allRadio);
+		fullRadio.setBounds(110, 70, 90, 25);
+		partRadio.setBounds(200, 70, 100, 25);
+		allRadio.setBounds(310, 70, 90, 25);
 		
 		searchButton = new JButton("Search");
 		searchButton.setBounds(180, 120, 120, 30);
 		searchButton.addActionListener(new SearchListener());
 		showButton = new JButton("Show contact");
-		showButton.setBounds(120, 470, 120, 30);
+		showButton.setBounds(50, 470, 120, 30);
 		showButton.addActionListener(new ShowListener());
 		addButton = new JButton("Add contact");
-		addButton.setBounds(250, 470, 120, 30);
+		addButton.setBounds(180, 470, 120, 30);
 		addButton.addActionListener(new AddListener());
+		deleteButton = new JButton("Delete contact");
+		deleteButton.setBounds(310, 470, 120, 30);
+		deleteButton.addActionListener(new DeleteListener());
 		
 		table = new JTable();
 		model = (DefaultTableModel) table.getModel();
@@ -64,9 +80,11 @@ public class CommandForm {
 		panel.add(topTextbox);
 		panel.add(fullRadio);
 		panel.add(partRadio);
+		panel.add(allRadio);
 		panel.add(searchButton);
 		panel.add(showButton);
 		panel.add(addButton);
+		panel.add(deleteButton);
 		panel.add(scroll);
 		
 		frame = new JFrame();
@@ -84,30 +102,52 @@ public class CommandForm {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
-			Model m = new Model();
+			m = new Model();
 			Object [] rowData = new Object[3];
 			model.setRowCount(0);
 			
 			for (int i = 0; i < m.getContacts().size(); i++) {
 				
-				if (fullRadio.isSelected() && (topTextbox.getText().toLowerCase().equals(m.getContacts().get(i).name.toLowerCase()) || topTextbox.getText().toLowerCase().equals(m.getContacts().get(i).surname.toLowerCase()))) {
+				if (topTextbox.getText().equals("") || allRadio.isSelected()) {
 					
-					rowData[0] = m.getContacts().get(i).name;
-					rowData[1] = m.getContacts().get(i).surname;
-					rowData[2] = m.getContacts().get(i).telNumber;
-					model.addRow(rowData);
-				} else if (partRadio.isSelected() && (m.getContacts().get(i).name.toLowerCase().contains(topTextbox.getText().toLowerCase()) || m.getContacts().get(i).surname.toLowerCase().contains(topTextbox.getText().toLowerCase()))) {
+					if (allRadio.isSelected()) {
+						
+						rowData[0] = m.getContacts().get(i).name;
+						rowData[1] = m.getContacts().get(i).surname;
+						rowData[2] = m.getContacts().get(i).telNumber;
+						model.addRow(rowData);
+					} else {
+						
+						JOptionPane.showMessageDialog(frame, "You must enter search parametres", "Enter search parametres", JOptionPane.WARNING_MESSAGE);
+						
+						break;
+					}
+				} else {
 					
-					rowData[0] = m.getContacts().get(i).name;
-					rowData[1] = m.getContacts().get(i).surname;
-					rowData[2] = m.getContacts().get(i).telNumber;
-					model.addRow(rowData);
-				} else if (fullRadio.isSelected() == false && partRadio.isSelected() == false) {
-					
-					JOptionPane.showMessageDialog(frame, "You didn't select any of radio buttons", "Select one of radio buttons", JOptionPane.WARNING_MESSAGE);
-					
-					break;
-				}				
+					if (fullRadio.isSelected() && (topTextbox.getText().toLowerCase().equals(m.getContacts().get(i).name.toLowerCase()) || topTextbox.getText().toLowerCase().equals(m.getContacts().get(i).surname.toLowerCase()))) {
+						
+						rowData[0] = m.getContacts().get(i).name;
+						rowData[1] = m.getContacts().get(i).surname;
+						rowData[2] = m.getContacts().get(i).telNumber;
+						model.addRow(rowData);
+					} else if (partRadio.isSelected() && (m.getContacts().get(i).name.toLowerCase().contains(topTextbox.getText().toLowerCase()) || m.getContacts().get(i).surname.toLowerCase().contains(topTextbox.getText().toLowerCase()))) {
+						
+						rowData[0] = m.getContacts().get(i).name;
+						rowData[1] = m.getContacts().get(i).surname;
+						rowData[2] = m.getContacts().get(i).telNumber;
+						model.addRow(rowData);
+					} else if (fullRadio.isSelected() == false && partRadio.isSelected() == false) {
+						
+						JOptionPane.showMessageDialog(frame, "You didn't select any of radio buttons", "Select full or part radio buttons", JOptionPane.WARNING_MESSAGE);
+						
+						break;
+					}	
+				}	
+			}
+			
+			if (model.getRowCount() == 0 && (fullRadio.isSelected() == true || partRadio.isSelected() == true) && !topTextbox.getText().isEmpty()) {
+				
+				JOptionPane.showMessageDialog(frame, "We couldn't find contact with that parametres", "No contact", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}		
 	}
@@ -149,6 +189,79 @@ public class CommandForm {
 			addForm.add();
 			
 		}		
+	}
+	
+	class DeleteListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+			m = new Model();
+			int index = table.getSelectedRow();
+			BufferedReader readContacts = null;
+			PrintWriter newContact = null;
+			File contacts = null;
+			File contacts1 = null;
+			
+			if (index >= 0) {
+				
+				String numberDelete = model.getValueAt(index, 2).toString();
+				model.removeRow(index);
+				
+				try {
+					contacts = new File("contacts.txt");
+					readContacts = new BufferedReader(new FileReader(contacts));
+					
+					contacts1 = new File("contacts1.txt");
+					contacts1.createNewFile();
+					newContact = new PrintWriter(new FileWriter(contacts1, true));
+					
+					String contactRow = "";
+					
+					while ((contactRow = readContacts.readLine()) != null) {
+						
+						StringTokenizer token = new StringTokenizer(contactRow, ";");
+						String name = token.nextToken();
+						String surname = token.nextToken();
+						String number = token.nextToken();
+						
+						if (numberDelete.equals(number)) {
+							
+							continue;
+						} else {
+							
+							newContact.println(name + ";" + surname + ";" + number);
+						}						
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					
+					try {
+						readContacts.close();
+						newContact.close();
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if (contacts.delete()) {
+						
+						contacts1.renameTo(contacts);
+					}
+				}
+				
+			} else {
+				
+				JOptionPane.showMessageDialog(frame, "You didn't select contact!", "Select contact", JOptionPane.WARNING_MESSAGE);
+			}
+			
+		}
+		
+		
 	}
 
 }
