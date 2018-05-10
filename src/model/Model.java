@@ -8,22 +8,15 @@ import domen.Contact;
 public class Model {
 	
 	private static final String fileName = "contacts.txt";
-	private ArrayList<Contact> contacts = new ArrayList<Contact>();
 	
-	public Model() {
+	public static ArrayList<Contact> readTheFile() {
 		
-		readTheFile();
-	}
-
-	public ArrayList<Contact> getContacts() {
-		return contacts;
-	}
-	
-	private void readTheFile() {
+		BufferedReader readContacts = null;
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		
 		try {
 			
-			BufferedReader readContacts = new BufferedReader(new FileReader(new File(fileName)));
+			readContacts = new BufferedReader(new FileReader(new File(fileName)));
 			String contactRow = "";
 			Contact contact;
 			
@@ -38,10 +31,20 @@ public class Model {
 				contacts.add(contact);
 			}
 			
-			readContacts.close();
+			return contacts;
 		} catch(IOException e) {
 			
 			e.printStackTrace();
+			
+			return contacts;
+		} finally {
+			
+			try {
+				readContacts.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}

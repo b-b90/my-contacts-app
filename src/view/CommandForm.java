@@ -8,9 +8,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import domen.Contact;
 import model.Model;
 
 public class CommandForm {
@@ -32,7 +35,6 @@ public class CommandForm {
 	ViewForm viewForm;
 	AddingForm addForm;
 	DefaultTableModel model;
-	Model m;
 	String [] columns = {"Name", "Surname", "Number"};
 	
 	public void go() {
@@ -102,19 +104,19 @@ public class CommandForm {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
-			m = new Model();
+			ArrayList<Contact> contacts = Model.readTheFile();
 			Object [] rowData = new Object[3];
 			model.setRowCount(0);
 			
-			for (int i = 0; i < m.getContacts().size(); i++) {
+			for (Contact c : contacts) {
 				
 				if (topTextbox.getText().equals("") || allRadio.isSelected()) {
 					
 					if (allRadio.isSelected()) {
 						
-						rowData[0] = m.getContacts().get(i).name;
-						rowData[1] = m.getContacts().get(i).surname;
-						rowData[2] = m.getContacts().get(i).telNumber;
+						rowData[0] = c.getName();
+						rowData[1] = c.getSurname();
+						rowData[2] = c.getTelNumber();
 						model.addRow(rowData);
 					} else {
 						
@@ -124,17 +126,17 @@ public class CommandForm {
 					}
 				} else {
 					
-					if (fullRadio.isSelected() && (topTextbox.getText().toLowerCase().equals(m.getContacts().get(i).name.toLowerCase()) || topTextbox.getText().toLowerCase().equals(m.getContacts().get(i).surname.toLowerCase()))) {
+					if (fullRadio.isSelected() && (topTextbox.getText().toLowerCase().equals(c.getName().toLowerCase()) || topTextbox.getText().toLowerCase().equals(c.getSurname().toLowerCase()))) {
 						
-						rowData[0] = m.getContacts().get(i).name;
-						rowData[1] = m.getContacts().get(i).surname;
-						rowData[2] = m.getContacts().get(i).telNumber;
+						rowData[0] = c.getName();
+						rowData[1] = c.getSurname();
+						rowData[2] = c.getTelNumber();
 						model.addRow(rowData);
-					} else if (partRadio.isSelected() && (m.getContacts().get(i).name.toLowerCase().contains(topTextbox.getText().toLowerCase()) || m.getContacts().get(i).surname.toLowerCase().contains(topTextbox.getText().toLowerCase()))) {
+					} else if (partRadio.isSelected() && (c.getName().toLowerCase().contains(topTextbox.getText().toLowerCase()) || c.getSurname().toLowerCase().contains(topTextbox.getText().toLowerCase()))) {
 						
-						rowData[0] = m.getContacts().get(i).name;
-						rowData[1] = m.getContacts().get(i).surname;
-						rowData[2] = m.getContacts().get(i).telNumber;
+						rowData[0] = c.getName();
+						rowData[1] = c.getSurname();
+						rowData[2] = c.getTelNumber();
 						model.addRow(rowData);
 					} else if (fullRadio.isSelected() == false && partRadio.isSelected() == false) {
 						
@@ -197,7 +199,6 @@ public class CommandForm {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
-			m = new Model();
 			int index = table.getSelectedRow();
 			BufferedReader readContacts = null;
 			PrintWriter newContact = null;

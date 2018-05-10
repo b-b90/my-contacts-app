@@ -2,7 +2,7 @@ package domen;
 
 public class Contact {
 	
-	public String name, surname, telNumber;
+	private String name, surname, telNumber;
 	
 	public Contact() {}
 	
